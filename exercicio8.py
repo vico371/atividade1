@@ -3,12 +3,10 @@ from tkinter import ttk, messagebox
 import sqlite3
 from utils import centralizar_janela, criar_botao_estilizado
 
-# Criação do banco de dados e tabela
 def criar_banco_dados():
     conn = sqlite3.connect('produtos.db')
     cursor = conn.cursor()
     
-    # Criação da tabela de produtos
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS produtos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,25 +19,20 @@ def criar_banco_dados():
     conn.commit()
     conn.close()
 
-# Parte 1: Adicionar Validação de Entradas
 def criar_interface_validacao():
     janela = tk.Tk()
     janela.title("Cadastro de Produtos com Validação")
     janela.geometry("500x400")
     
-    # Frame principal
     frame = tk.Frame(janela, padx=20, pady=20)
     frame.pack(fill=tk.BOTH, expand=True)
     
-    # Rótulo de título
     label_titulo = tk.Label(frame, text="Cadastro de Produtos", font=("Arial", 16, "bold"))
     label_titulo.pack(pady=(0, 20))
     
-    # Frame para os campos de entrada
     frame_campos = tk.Frame(frame)
     frame_campos.pack(fill=tk.X, pady=(0, 10))
     
-    # Campos de entrada
     label_nome = tk.Label(frame_campos, text="Nome:", font=("Arial", 12))
     label_nome.grid(row=0, column=0, sticky=tk.W, pady=5)
     entrada_nome = tk.Entry(frame_campos, font=("Arial", 12), width=30)
@@ -55,11 +48,9 @@ def criar_interface_validacao():
     entrada_preco = tk.Entry(frame_campos, font=("Arial", 12), width=10)
     entrada_preco.grid(row=2, column=1, sticky=tk.W, pady=5)
     
-    # Área de texto para exibir os produtos
     label_produtos = tk.Label(frame, text="Produtos Cadastrados:", font=("Arial", 12))
     label_produtos.pack(anchor=tk.W, pady=(10, 5))
     
-    # Treeview para exibir os produtos
     colunas = ("id", "nome", "quantidade", "preco")
     tree = ttk.Treeview(frame, columns=colunas, show="headings", height=8)
     
@@ -75,22 +66,18 @@ def criar_interface_validacao():
     
     tree.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
     
-    # Frame para os botões
     frame_botoes = tk.Frame(frame)
     frame_botoes.pack(fill=tk.X, pady=10)
     
-    # Funções para manipular os produtos
     def validar_entradas():
         nome = entrada_nome.get()
         quantidade = entrada_quantidade.get()
         preco = entrada_preco.get()
         
-        # Validação do nome
         if not nome:
             messagebox.showerror("Erro", "O nome do produto não pode estar vazio")
             return False
         
-        # Validação da quantidade
         try:
             quantidade_int = int(quantidade)
             if quantidade_int <= 0:
@@ -100,7 +87,6 @@ def criar_interface_validacao():
             messagebox.showerror("Erro", "A quantidade deve ser um número inteiro válido")
             return False
         
-        # Validação do preço
         try:
             preco_float = float(preco)
             if preco_float <= 0:
@@ -118,7 +104,6 @@ def criar_interface_validacao():
             quantidade = int(entrada_quantidade.get())
             preco = float(entrada_preco.get())
             
-            # Inserir no banco de dados
             conn = sqlite3.connect('produtos.db')
             cursor = conn.cursor()
             
@@ -130,23 +115,20 @@ def criar_interface_validacao():
             conn.commit()
             conn.close()
             
-            # Limpar campos
             entrada_nome.delete(0, tk.END)
             entrada_quantidade.delete(0, tk.END)
             entrada_preco.delete(0, tk.END)
             entrada_nome.focus()
             
-            # Atualizar a lista de produtos
             atualizar_lista()
             
             messagebox.showinfo("Sucesso", "Produto cadastrado com sucesso!")
     
     def atualizar_lista():
-        # Limpar a lista atual
+       
         for item in tree.get_children():
             tree.delete(item)
         
-        # Buscar produtos no banco de dados
         conn = sqlite3.connect('produtos.db')
         cursor = conn.cursor()
         
@@ -155,7 +137,6 @@ def criar_interface_validacao():
         
         conn.close()
         
-        # Adicionar produtos à lista
         for produto in produtos:
             tree.insert("", tk.END, values=produto)
     
@@ -165,7 +146,6 @@ def criar_interface_validacao():
         entrada_preco.delete(0, tk.END)
         entrada_nome.focus()
     
-    # Botões
     botao_inserir = criar_botao_estilizado(frame_botoes, "Inserir Produto", inserir_produto)
     botao_atualizar = criar_botao_estilizado(frame_botoes, "Atualizar Lista", atualizar_lista)
     botao_limpar = criar_botao_estilizado(frame_botoes, "Limpar Campos", limpar_campos)
@@ -174,35 +154,27 @@ def criar_interface_validacao():
     botao_atualizar.pack(side=tk.LEFT, padx=(0, 10))
     botao_limpar.pack(side=tk.LEFT)
     
-    # Criar banco de dados se não existir
     criar_banco_dados()
     
-    # Atualizar a lista de produtos
     atualizar_lista()
     
-    # Centraliza a janela
     centralizar_janela(janela)
     
-    # Foco no primeiro campo
     entrada_nome.focus()
     
     return janela
 
-# Parte 2: Atualizar Produtos
 def criar_interface_atualizacao():
     janela = tk.Tk()
     janela.title("Atualização de Produtos")
     janela.geometry("500x450")
     
-    # Frame principal
     frame = tk.Frame(janela, padx=20, pady=20)
     frame.pack(fill=tk.BOTH, expand=True)
     
-    # Rótulo de título
     label_titulo = tk.Label(frame, text="Atualização de Produtos", font=("Arial", 16, "bold"))
     label_titulo.pack(pady=(0, 20))
     
-    # Frame para busca por ID
     frame_busca = tk.Frame(frame)
     frame_busca.pack(fill=tk.X, pady=(0, 10))
     
@@ -212,11 +184,9 @@ def criar_interface_atualizacao():
     entrada_id = tk.Entry(frame_busca, font=("Arial", 12), width=10)
     entrada_id.pack(side=tk.LEFT, padx=(0, 10))
     
-    # Frame para os campos de entrada
     frame_campos = tk.Frame(frame)
     frame_campos.pack(fill=tk.X, pady=(10, 10))
     
-    # Campos de entrada
     label_nome = tk.Label(frame_campos, text="Nome:", font=("Arial", 12))
     label_nome.grid(row=0, column=0, sticky=tk.W, pady=5)
     entrada_nome = tk.Entry(frame_campos, font=("Arial", 12), width=30)
@@ -232,11 +202,9 @@ def criar_interface_atualizacao():
     entrada_preco = tk.Entry(frame_campos, font=("Arial", 12), width=10)
     entrada_preco.grid(row=2, column=1, sticky=tk.W, pady=5)
     
-    # Área de texto para exibir os produtos
     label_produtos = tk.Label(frame, text="Produtos Cadastrados:", font=("Arial", 12))
     label_produtos.pack(anchor=tk.W, pady=(10, 5))
     
-    # Treeview para exibir os produtos
     colunas = ("id", "nome", "quantidade", "preco")
     tree = ttk.Treeview(frame, columns=colunas, show="headings", height=8)
     
@@ -252,11 +220,9 @@ def criar_interface_atualizacao():
     
     tree.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
     
-    # Frame para os botões
     frame_botoes = tk.Frame(frame)
     frame_botoes.pack(fill=tk.X, pady=10)
     
-    # Funções para manipular os produtos
     def buscar_produto():
         id_produto = entrada_id.get()
         
@@ -270,7 +236,6 @@ def criar_interface_atualizacao():
             messagebox.showerror("Erro", "O ID deve ser um número inteiro")
             return
         
-        # Buscar produto no banco de dados
         conn = sqlite3.connect('produtos.db')
         cursor = conn.cursor()
         
@@ -280,7 +245,6 @@ def criar_interface_atualizacao():
         conn.close()
         
         if produto:
-            # Preencher os campos com os dados do produto
             entrada_nome.delete(0, tk.END)
             entrada_quantidade.delete(0, tk.END)
             entrada_preco.delete(0, tk.END)
@@ -296,12 +260,10 @@ def criar_interface_atualizacao():
         quantidade = entrada_quantidade.get()
         preco = entrada_preco.get()
         
-        # Validação do nome
         if not nome:
             messagebox.showerror("Erro", "O nome do produto não pode estar vazio")
             return False
         
-        # Validação da quantidade
         try:
             quantidade_int = int(quantidade)
             if quantidade_int <= 0:
@@ -311,7 +273,6 @@ def criar_interface_atualizacao():
             messagebox.showerror("Erro", "A quantidade deve ser um número inteiro válido")
             return False
         
-        # Validação do preço
         try:
             preco_float = float(preco)
             if preco_float <= 0:
@@ -341,7 +302,6 @@ def criar_interface_atualizacao():
             quantidade = int(entrada_quantidade.get())
             preco = float(entrada_preco.get())
             
-            # Atualizar no banco de dados
             conn = sqlite3.connect('produtos.db')
             cursor = conn.cursor()
             
@@ -359,24 +319,21 @@ def criar_interface_atualizacao():
             conn.commit()
             conn.close()
             
-            # Limpar campos
             entrada_id.delete(0, tk.END)
             entrada_nome.delete(0, tk.END)
             entrada_quantidade.delete(0, tk.END)
             entrada_preco.delete(0, tk.END)
             entrada_id.focus()
             
-            # Atualizar a lista de produtos
             atualizar_lista()
             
             messagebox.showinfo("Sucesso", "Produto atualizado com sucesso!")
     
     def atualizar_lista():
-        # Limpar a lista atual
+
         for item in tree.get_children():
             tree.delete(item)
         
-        # Buscar produtos no banco de dados
         conn = sqlite3.connect('produtos.db')
         cursor = conn.cursor()
         
@@ -385,7 +342,6 @@ def criar_interface_atualizacao():
         
         conn.close()
         
-        # Adicionar produtos à lista
         for produto in produtos:
             tree.insert("", tk.END, values=produto)
     
@@ -395,12 +351,10 @@ def criar_interface_atualizacao():
         entrada_quantidade.delete(0, tk.END)
         entrada_preco.delete(0, tk.END)
         entrada_id.focus()
-    
-    # Botão de busca
+
     botao_buscar = criar_botao_estilizado(frame_busca, "Buscar", buscar_produto)
     botao_buscar.pack(side=tk.LEFT)
     
-    # Botões
     botao_atualizar = criar_botao_estilizado(frame_botoes, "Atualizar Produto", atualizar_produto)
     botao_listar = criar_botao_estilizado(frame_botoes, "Atualizar Lista", atualizar_lista)
     botao_limpar = criar_botao_estilizado(frame_botoes, "Limpar Campos", limpar_campos)
@@ -409,35 +363,27 @@ def criar_interface_atualizacao():
     botao_listar.pack(side=tk.LEFT, padx=(0, 10))
     botao_limpar.pack(side=tk.LEFT)
     
-    # Criar banco de dados se não existir
     criar_banco_dados()
     
-    # Atualizar a lista de produtos
     atualizar_lista()
     
-    # Centraliza a janela
     centralizar_janela(janela)
     
-    # Foco no campo de ID
     entrada_id.focus()
     
     return janela
 
-# Parte 3: Excluir Produtos
 def criar_interface_exclusao():
     janela = tk.Tk()
     janela.title("Exclusão de Produtos")
     janela.geometry("500x400")
     
-    # Frame principal
     frame = tk.Frame(janela, padx=20, pady=20)
     frame.pack(fill=tk.BOTH, expand=True)
     
-    # Rótulo de título
     label_titulo = tk.Label(frame, text="Exclusão de Produtos", font=("Arial", 16, "bold"))
     label_titulo.pack(pady=(0, 20))
     
-    # Frame para busca por ID
     frame_busca = tk.Frame(frame)
     frame_busca.pack(fill=tk.X, pady=(0, 10))
     
@@ -447,11 +393,9 @@ def criar_interface_exclusao():
     entrada_id = tk.Entry(frame_busca, font=("Arial", 12), width=10)
     entrada_id.pack(side=tk.LEFT, padx=(0, 10))
     
-    # Área de texto para exibir os produtos
     label_produtos = tk.Label(frame, text="Produtos Cadastrados:", font=("Arial", 12))
     label_produtos.pack(anchor=tk.W, pady=(10, 5))
     
-    # Treeview para exibir os produtos
     colunas = ("id", "nome", "quantidade", "preco")
     tree = ttk.Treeview(frame, columns=colunas, show="headings", height=10)
     

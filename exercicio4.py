@@ -1,13 +1,11 @@
 import tkinter as tk
 from utils import centralizar_janela, criar_botao_estilizado
 
-# Parte 1: Formulário Simples com Grid
 def criar_formulario_grid():
     janela = tk.Tk()
     janela.title("Formulário com Grid")
     janela.geometry("400x300")
     
-    # Criação dos widgets
     label_nome = tk.Label(janela, text="Nome:", font=("Arial", 12))
     label_idade = tk.Label(janela, text="Idade:", font=("Arial", 12))
     label_genero = tk.Label(janela, text="Gênero:", font=("Arial", 12))
@@ -38,7 +36,6 @@ def criar_formulario_grid():
     
     resultado = tk.Label(janela, text="", font=("Arial", 12), justify=tk.LEFT)
     
-    # Posicionamento com Grid
     label_nome.grid(row=0, column=0, sticky=tk.W, padx=10, pady=10)
     entrada_nome.grid(row=0, column=1, padx=10, pady=10)
     
@@ -55,53 +52,43 @@ def criar_formulario_grid():
     
     resultado.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
     
-    # Centraliza a janela
     centralizar_janela(janela)
     
     return janela
 
-# Parte 2: Layout com Pack
 def criar_layout_pack():
     janela = tk.Tk()
     janela.title("Layout com Pack")
     janela.geometry("300x250")
     
-    # Frame para centralizar os botões
     frame = tk.Frame(janela)
     frame.pack(expand=True)
     
-    # Criação dos botões
     botao1 = criar_botao_estilizado(frame, "Botão 1", lambda: print("Botão 1 clicado"))
     botao2 = criar_botao_estilizado(frame, "Botão 2", lambda: print("Botão 2 clicado"))
     botao3 = criar_botao_estilizado(frame, "Botão 3", lambda: print("Botão 3 clicado"))
     
-    # Posicionamento com Pack
     botao1.pack(pady=10)
     botao2.pack(pady=10)
     botao3.pack(pady=10)
     
-    # Centraliza a janela
     centralizar_janela(janela)
     
     return janela
 
-# Parte 3: Posicionamento com Place
 def criar_layout_place():
     janela = tk.Tk()
     janela.title("Posicionamento com Place")
     janela.geometry("400x300")
     
-    # Criação dos rótulos
     label1 = tk.Label(janela, text="Rótulo Superior Esquerdo", font=("Arial", 10))
     label2 = tk.Label(janela, text="Rótulo Centro", font=("Arial", 10))
     label3 = tk.Label(janela, text="Rótulo Inferior Direito", font=("Arial", 10))
     
-    # Criação dos botões
     botao1 = criar_botao_estilizado(janela, "Botão 1", lambda: print("Botão 1 clicado"))
     botao2 = criar_botao_estilizado(janela, "Botão 2", lambda: print("Botão 2 clicado"))
     botao3 = criar_botao_estilizado(janela, "Botão 3", lambda: print("Botão 3 clicado"))
     
-    # Posicionamento com Place
     label1.place(x=20, y=20)
     label2.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
     label3.place(x=280, y=250)
@@ -110,12 +97,10 @@ def criar_layout_place():
     botao2.place(relx=0.5, rely=0.7, anchor=tk.CENTER)
     botao3.place(x=250, y=200)
     
-    # Centraliza a janela
     centralizar_janela(janela)
     
     return janela
 
-# Função para escolher qual layout exibir
 def main():
     janela_escolha = tk.Tk()
     janela_escolha.title("Escolha de Layout")
@@ -150,7 +135,6 @@ def main():
     botao_pack.pack(side=tk.LEFT, padx=10)
     botao_place.pack(side=tk.LEFT, padx=10)
     
-    # Centraliza a janela
     centralizar_janela(janela_escolha)
     
     janela_escolha.mainloop()

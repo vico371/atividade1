@@ -53,7 +53,6 @@ def criar_botao_estilizado(master, texto, comando=None):
     """
     botao = tk.Button(master, text=texto, command=comando, bg="#FFFF00", activebackground="#00FF00")
     
-    # Adiciona eventos para mudar a cor quando o botão é pressionado e liberado
     botao.bind("<ButtonPress-1>", lambda e: botao.config(bg="#00FF00"))
     botao.bind("<ButtonRelease-1>", lambda e: botao.config(bg="#FFFF00"))
     
